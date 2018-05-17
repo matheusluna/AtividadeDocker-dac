@@ -1,4 +1,5 @@
 /home/matheus/NetBeansProjects/AtividadePratica-dac/src/main/java/br/edu/ifpb/enums/Estilo.java
 /home/matheus/NetBeansProjects/AtividadePratica-dac/src/main/java/br/edu/ifpb/entidades/Banda.java
 /home/matheus/NetBeansProjects/AtividadePratica-dac/src/main/java/br/edu/ifpb/entidades/Album.java
+/home/matheus/NetBeansProjects/AtividadePratica-dac/src/main/java/br/edu/ifpb/persistencia/AlbumDao.java
 /home/matheus/NetBeansProjects/AtividadePratica-dac/src/main/java/br/edu/ifpb/fabricas/ConnectionFactory.java

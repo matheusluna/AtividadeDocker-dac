@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,31 +40,24 @@ public class AlbumDao {
             con.close();
             stmt.close();
             return retorno;
-        } catch (SQLException ex) {
-            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
-    public ArrayList<Album> read() {
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement st = con.prepareStatement("SELECT * FROM album");
-            ResultSet r = st.executeQuery();
-            ArrayList<Album> albuns = new ArrayList<>();
-            while (r.next()) {
-                Album album = new Album();
-                album.setEstilo(Estilo.valueOf(r.getString("estilo")));
-                album.setBanda(readBanda(r.getString("banda")));
-                album.setAnoDeLancamento(r.getDate("anodelancamento").toLocalDate());
-                albuns.add(album);
-            }
-            st.close();
-            con.close();
-            return albuns;
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
+    public Album read(int id) throws ClassNotFoundException, SQLException{
+        Connection con = ConnectionFactory.getConnection();
+        String sql = "select * from album where id = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+        Album album = null;
+        while(rs.next()){
+            Estilo estilo = Estilo.valueOf(rs.getString("estilo"));
+            Banda banda = readBanda(rs.getString("banda"));
+            LocalDate data = rs.getDate("anodelancamento").toLocalDate();
+            album = new Album(id, estilo, banda, data);
         }
         return null;
     }
@@ -104,13 +98,32 @@ public class AlbumDao {
             st.close();
             con.close();
             return retorno;
-        } catch (SQLException ex) {
-            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
 
+    }
+    
+    public List<Banda> listBanda(){
+        List<Banda> bandas = new ArrayList<>();
+        try {
+            Connection connection = ConnectionFactory.getConnection();
+            String sql = "select * from banda";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String nome = rs.getString("nome");
+                String localDeOrigem = rs.getString("localdeorigem");
+                List<String> integrantes = readIntegrantes(nome);
+                Banda banda = new Banda(nome, localDeOrigem, integrantes);
+                bandas.add(banda);
+            }
+            return bandas;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return bandas;
     }
 
     public Banda readBanda(String nome) {

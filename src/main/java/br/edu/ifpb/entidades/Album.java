@@ -14,6 +14,7 @@ import java.util.Objects;
  * @author matheus
  */
 public class Album {
+    private int id;
     private Estilo estilo;
     private Banda banda;
     private LocalDate anoDeLancamento;
@@ -27,6 +28,21 @@ public class Album {
         this.anoDeLancamento = anoDeLancamento;
     }
 
+    public Album(int id, Estilo estilo, Banda banda, LocalDate anoDeLancamento) {
+        this.id = id;
+        this.estilo = estilo;
+        this.banda = banda;
+        this.anoDeLancamento = anoDeLancamento;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public Estilo getEstilo() {
         return estilo;
     }
@@ -54,9 +70,10 @@ public class Album {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.estilo);
-        hash = 97 * hash + Objects.hashCode(this.banda);
-        hash = 97 * hash + Objects.hashCode(this.anoDeLancamento);
+        hash = 13 * hash + this.id;
+        hash = 13 * hash + Objects.hashCode(this.estilo);
+        hash = 13 * hash + Objects.hashCode(this.banda);
+        hash = 13 * hash + Objects.hashCode(this.anoDeLancamento);
         return hash;
     }
 
@@ -72,6 +89,9 @@ public class Album {
             return false;
         }
         final Album other = (Album) obj;
+        if (this.id != other.id) {
+            return false;
+        }
         if (this.estilo != other.estilo) {
             return false;
         }
@@ -86,8 +106,7 @@ public class Album {
 
     @Override
     public String toString() {
-        return "Album{" + "estilo=" + estilo + ", banda=" + banda + ", anoDeLancamento=" + anoDeLancamento + '}';
+        return "Album{" + "id=" + id + ", estilo=" + estilo + ", banda=" + banda + ", anoDeLancamento=" + anoDeLancamento + '}';
     }
-    
     
 }

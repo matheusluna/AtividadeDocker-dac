@@ -1,1 +1,5 @@
+br/edu/ifpb/entidades/Album.class
+br/edu/ifpb/entidades/Banda.class
+br/edu/ifpb/enums/Estilo.class
+br/edu/ifpb/persistencia/AlbumDao.class
 br/edu/ifpb/fabricas/ConnectionFactory.class
