@@ -8,6 +8,7 @@ package br.edu.ifpb.persistencia;
 import br.edu.ifpb.entidades.Album;
 import br.edu.ifpb.entidades.Banda;
 import br.edu.ifpb.enums.Estilo;
+import br.edu.ifpb.fabricas.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -40,6 +41,8 @@ public class AlbumDao {
             return retorno;
         } catch (SQLException ex) {
             Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -51,7 +54,7 @@ public class AlbumDao {
             ArrayList<Album> albuns = new ArrayList<>();
             while (r.next()) {
                 Album album = new Album();
-                album.setEstilo( Estilo.valueOf(r.getString("estilo")));
+                album.setEstilo(Estilo.valueOf(r.getString("estilo")));
                 album.setBanda(readBanda(r.getString("banda")));
                 album.setAnoDeLancamento(r.getDate("anodelancamento").toLocalDate());
                 albuns.add(album);
@@ -85,9 +88,10 @@ public class AlbumDao {
     }
 
     public boolean update(Album albumNovo, int id) {
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement st;
+
         try {
+            Connection con = ConnectionFactory.getConnection();
+            PreparedStatement st;
             st = con.prepareStatement(
                     "UPDATE album SET (estilo, banda, anodelancamento)"
                     + " = (?,?,?) WHERE id = ?");
@@ -102,11 +106,13 @@ public class AlbumDao {
             return retorno;
         } catch (SQLException ex) {
             Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlbumDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
 
     }
-    
+
     public Banda readBanda(String nome) {
         try (Connection con = ConnectionFactory.getConnection()) {
             PreparedStatement st = con.prepareStatement("SELECT * FROM banda WHERE nome = ?");
@@ -114,10 +120,10 @@ public class AlbumDao {
             ResultSet r = st.executeQuery();
             Banda banda = new Banda();
             if (r.next()) {
-               banda.setNome(r.getString("nome"));
-               banda.setIntegrantes(readIntegrantes(r.getString("nome")));
-               banda.setLocalDeOrigiem(r.getString("localdeorigem"));
-               return banda;
+                banda.setNome(r.getString("nome"));
+                banda.setIntegrantes(readIntegrantes(r.getString("nome")));
+                banda.setLocalDeOrigiem(r.getString("localdeorigem"));
+                return banda;
             }
             st.close();
             con.close();
@@ -127,7 +133,7 @@ public class AlbumDao {
         }
         return null;
     }
-    
+
     public ArrayList<String> readIntegrantes(String nome) {
         try (Connection con = ConnectionFactory.getConnection()) {
             PreparedStatement st = con.prepareStatement("SELECT * FROM integrante WHERE banda = ?");
@@ -145,7 +151,5 @@ public class AlbumDao {
         }
         return null;
     }
-
-
 
 }
