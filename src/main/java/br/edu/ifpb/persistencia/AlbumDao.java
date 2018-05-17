@@ -87,14 +87,8 @@ public class AlbumDao {
         return false;
     }
 
-<<<<<<< HEAD
-    public boolean update(Album albumNovo, int id) throws SQLException, ClassNotFoundException {
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement st;
-=======
     public boolean update(Album albumNovo, int id) {
 
->>>>>>> master
         try {
             Connection con = ConnectionFactory.getConnection();
             PreparedStatement st;
