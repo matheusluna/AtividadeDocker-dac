@@ -8,6 +8,7 @@ package br.edu.ifpb.persistencia;
 import br.edu.ifpb.entidades.Album;
 import br.edu.ifpb.entidades.Banda;
 import br.edu.ifpb.enums.Estilo;
+import br.edu.ifpb.fabricas.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,7 +28,7 @@ public class AlbumDao {
     public AlbumDao() {
     }
 
-    public boolean create(Album album) {
+    public boolean create(Album album) throws ClassNotFoundException {
         try (Connection con = ConnectionFactory.getConnection()) {
             String sql = "INSERT INTO album (estilo,banda,anodelancamento) VALUES (?,?,?)";
             PreparedStatement stmt = con.prepareStatement(sql);
@@ -84,7 +85,7 @@ public class AlbumDao {
         return false;
     }
 
-    public boolean update(Album albumNovo, int id) {
+    public boolean update(Album albumNovo, int id) throws SQLException, ClassNotFoundException {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement st;
         try {
